@@ -5,15 +5,19 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.chat.R
 import com.example.chat.databinding.FragmentChattingBinding
 import com.example.chat.model.data.Users
+import com.example.chat.viewModel.ChatViewModel
 
 class ChattingFragment : Fragment() {
 
     lateinit var binding:FragmentChattingBinding
     lateinit var adapter: ChattingAdapter
+    lateinit var viewModel: ChatViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -30,11 +34,16 @@ class ChattingFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.toolBar.inflateMenu(R.menu.friends_menu)
 
+        viewModel = ViewModelProvider(this).get(ChatViewModel::class.java)
+
         adapter = ChattingAdapter()
         binding.recyclerView.adapter = adapter
         binding.recyclerView.layoutManager = LinearLayoutManager(context)
 
-        adapter.addItem(dataTest())
+        viewModel.chatList.observe(viewLifecycleOwner, Observer {
+            adapter.addItem(it)
+        })
+
     }
 
     fun dataTest(): MutableList<Users>{

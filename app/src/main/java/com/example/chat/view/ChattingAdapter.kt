@@ -10,7 +10,7 @@ import com.example.chat.model.data.Users
 
 class ChattingAdapter : RecyclerView.Adapter<ChattingAdapter.Holder>(){
 
-    var dataList:List<Users> = listOf()
+    var dataList:List<String> = listOf()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
         val binding = RecyclerChattingBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -24,8 +24,9 @@ class ChattingAdapter : RecyclerView.Adapter<ChattingAdapter.Holder>(){
     override fun getItemCount(): Int = dataList.size
 
     inner class Holder(val binding: RecyclerChattingBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(user:Users){
+        fun bind(user:String){
             with(binding) {
+                roomName.text = user
                 contentBox.setOnClickListener {
                     val intent = Intent(contentBox.context, ChattingDetailActivity::class.java)
                     ContextCompat.startActivity(contentBox.context, intent, null)
@@ -34,7 +35,7 @@ class ChattingAdapter : RecyclerView.Adapter<ChattingAdapter.Holder>(){
         }
     }
 
-    fun addItem(list: List<Users>){
+    fun addItem(list: List<String>){
         this.dataList = list
         notifyDataSetChanged()
     }

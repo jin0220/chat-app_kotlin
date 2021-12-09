@@ -1,13 +1,18 @@
 package com.example.chat.view
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.chat.R
 import com.example.chat.databinding.RecyclerChatLeftBinding
 import com.example.chat.databinding.RecyclerChatRightBinding
 import com.example.chat.model.data.Chat
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.time.days
 
 class ChattingDetailAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
 
@@ -48,13 +53,37 @@ class ChattingDetailAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
 
     inner class LeftHolder(view: View): RecyclerView.ViewHolder(view){
         fun bind(chat: Chat){
+            val name = itemView.findViewById<TextView>(R.id.name)
+            val content = itemView.findViewById<TextView>(R.id.content)
+            val date = itemView.findViewById<TextView>(R.id.date)
 
+            name.text = chat.name
+            content.text = chat.content
+
+            var sdf = SimpleDateFormat("hh:mm")
+
+            if(SimpleDateFormat("HH").format(chat.date).toInt() > 12){
+                date.text = "오후 " + sdf.format(chat.date)
+            }else{
+                date.text = "오전 " + sdf.format(chat.date)
+            }
         }
     }
 
     inner class RightHolder(view: View): RecyclerView.ViewHolder(view){
         fun bind(chat: Chat){
+            val content = itemView.findViewById<TextView>(R.id.content)
+            val date = itemView.findViewById<TextView>(R.id.date)
 
+            content.text = chat.content
+
+            var sdf = SimpleDateFormat("hh:mm")
+
+            if(SimpleDateFormat("HH").format(chat.date).toInt() > 12){
+                date.text = "오후 " + sdf.format(chat.date)
+            }else{
+                date.text = "오전 " + sdf.format(chat.date)
+            }
         }
     }
 

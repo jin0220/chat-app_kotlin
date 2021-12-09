@@ -10,33 +10,40 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        android:overScrollMode="never"
+        android:layout_above="@+id/chatting"/>
 
     <LinearLayout
+        android:id="@+id/chatting"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_alignParentBottom="true"
-        android:padding="4dp"
+        android:paddingHorizontal="10dp"
+        android:paddingVertical="6dp"
         android:gravity="center_vertical"
         android:focusable="true"
         android:focusableInTouchMode="true"
         android:background="#fef5ed">
 
         <EditText
-            android:id="@+id/comment_write"
-            android:layout_width="350dp"
+            android:id="@+id/content"
+            android:layout_width="340dp"
             android:layout_height="wrap_content"
             android:inputType="textMultiLine"
             android:padding="10dp"
             android:maxLines="5"
             android:background="@color/white"/>
 
-        <Button
+        <ImageView
             android:id="@+id/submit"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"/>
+            android:layout_height="43dp"
+            android:layout_marginLeft="8dp"
+            android:src="@drawable/ic_send"
+            android:background="#adc2a9"
+            android:paddingHorizontal="10dp"/>
 
     </LinearLayout>
 
