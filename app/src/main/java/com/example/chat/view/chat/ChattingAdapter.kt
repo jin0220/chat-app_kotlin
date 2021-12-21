@@ -1,6 +1,7 @@
 package com.example.chat.view.chat
 
 import android.content.Intent
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
@@ -8,10 +9,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.chat.databinding.RecyclerChattingBinding
 import com.example.chat.viewModel.ChatViewModel
 
-class ChattingAdapter : RecyclerView.Adapter<ChattingAdapter.Holder>(){
+class ChattingAdapter(var viewModel: ChatViewModel) : RecyclerView.Adapter<ChattingAdapter.Holder>(){
 
-    var dataList:List<String> = listOf()
-    lateinit var viewModel: ChatViewModel
+    var dataList:MutableList<String> = arrayListOf()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
         val binding = RecyclerChattingBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -36,13 +36,14 @@ class ChattingAdapter : RecyclerView.Adapter<ChattingAdapter.Holder>(){
 
                 contentBox.setOnLongClickListener {
                     viewModel.chatDelete(user)
+                    dataList.clear() // 배열이 중복으로 쌓이는 것을 해결하기 위해 사용
                     return@setOnLongClickListener true
                 }
             }
         }
     }
 
-    fun addItem(list: List<String>){
+    fun addItem(list: MutableList<String>){
         this.dataList = list
         notifyDataSetChanged()
     }

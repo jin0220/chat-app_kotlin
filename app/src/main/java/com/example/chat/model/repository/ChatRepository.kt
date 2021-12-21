@@ -1,5 +1,6 @@
 package com.example.chat.model.repository
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.chat.model.data.Chat
@@ -18,8 +19,8 @@ class ChatRepository {
     }
 
     // 대화방 리스트
-    fun chatList() : LiveData<List<String>>{
-        var mutableList = MutableLiveData<List<String>>()
+    fun chatList() : LiveData<MutableList<String>>{
+        var mutableList = MutableLiveData<MutableList<String>>()
         databaseReference.addValueEventListener(object : ValueEventListener{
             var list : MutableList<String> = mutableListOf()
             override fun onDataChange(snapshot: DataSnapshot) {
