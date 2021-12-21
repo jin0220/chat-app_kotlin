@@ -1,4 +1,4 @@
-package com.example.chat.view
+package com.example.chat.view.setting
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment

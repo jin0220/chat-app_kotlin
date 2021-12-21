@@ -1,10 +1,9 @@
 package com.example.chat.model.repository
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.chat.model.data.Chat
-import com.example.chat.view.ChattingAdapter
+import com.example.chat.model.data.Users
 import com.google.firebase.database.*
 
 
@@ -12,6 +11,11 @@ class ChatRepository {
     // Write a message to the database
     private val database = FirebaseDatabase.getInstance()
     private val databaseReference = database.getReference("chat")
+
+    fun initChat(users : Users, chat: Chat){
+        databaseReference.child(users.name).child("users").push().setValue(users)
+        databaseReference.child(users.name).child("message").push().setValue(chat)
+    }
 
     // 대화방 리스트
     fun chatList() : LiveData<List<String>>{
@@ -35,14 +39,18 @@ class ChatRepository {
         return mutableList
     }
 
-    // 대화 내용
-    fun setData(chat: Chat) {
-        databaseReference.child("chat_name").push().setValue(chat)
+    fun chatDelete(chat_name:String) {
+        databaseReference.child(chat_name).removeValue()
     }
 
-    fun getData() : LiveData<MutableList<Chat>>{
+    // 대화 내용
+    fun setData(chat_name: String, chat: Chat) {
+        databaseReference.child(chat_name).child("message").push().setValue(chat)
+    }
+
+    fun getData(chat_name: String) : LiveData<MutableList<Chat>>{
         val mutableList = MutableLiveData<MutableList<Chat>>()
-        databaseReference.child("chat_name").addValueEventListener(object : ValueEventListener{
+        databaseReference.child(chat_name).child("message").addValueEventListener(object : ValueEventListener{
             val listData: MutableList<Chat> = mutableListOf()
             override fun onDataChange(snapshot: DataSnapshot) {
                 listData.clear()

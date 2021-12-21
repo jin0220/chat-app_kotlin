@@ -1,4 +1,4 @@
-package com.example.chat.view
+package com.example.chat.view.chat
 
 import android.content.Intent
 import android.view.LayoutInflater
@@ -6,11 +6,12 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.chat.databinding.RecyclerChattingBinding
-import com.example.chat.model.data.Users
+import com.example.chat.viewModel.ChatViewModel
 
 class ChattingAdapter : RecyclerView.Adapter<ChattingAdapter.Holder>(){
 
     var dataList:List<String> = listOf()
+    lateinit var viewModel: ChatViewModel
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
         val binding = RecyclerChattingBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -29,7 +30,13 @@ class ChattingAdapter : RecyclerView.Adapter<ChattingAdapter.Holder>(){
                 roomName.text = user
                 contentBox.setOnClickListener {
                     val intent = Intent(contentBox.context, ChattingDetailActivity::class.java)
+                    intent.putExtra("chat_name", user)
                     ContextCompat.startActivity(contentBox.context, intent, null)
+                }
+
+                contentBox.setOnLongClickListener {
+                    viewModel.chatDelete(user)
+                    return@setOnLongClickListener true
                 }
             }
         }

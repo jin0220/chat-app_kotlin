@@ -1,18 +1,13 @@
-package com.example.chat.view
+package com.example.chat.view.chat
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.chat.R
-import com.example.chat.databinding.RecyclerChatLeftBinding
-import com.example.chat.databinding.RecyclerChatRightBinding
 import com.example.chat.model.data.Chat
 import java.text.SimpleDateFormat
-import java.util.*
-import kotlin.time.days
 
 class ChattingDetailAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
 

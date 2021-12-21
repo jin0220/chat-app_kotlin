@@ -1,17 +1,20 @@
-package com.example.chat.view
+package com.example.chat.view.friends
 
 import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.chat.R
 import com.example.chat.databinding.FragmentFriendsListBinding
-import com.example.chat.model.data.Users
+import com.example.chat.viewModel.UsersViewModel
 
 class FriendsListFragment : Fragment() {
 
     lateinit var binding: FragmentFriendsListBinding
     lateinit var adapter: FriendsAdapter
+    lateinit var viewModel: UsersViewModel
 
     override fun onCreateView(
             inflater: LayoutInflater, container: ViewGroup?,
@@ -29,18 +32,15 @@ class FriendsListFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.toolBar.inflateMenu(R.menu.friends_menu)
 
+        viewModel = ViewModelProvider(this).get(UsersViewModel::class.java)
+
         adapter = FriendsAdapter()
         binding.recyclerView.adapter = adapter
         binding.recyclerView.layoutManager = LinearLayoutManager(context)
 
-        adapter.addItem(dataTest())
+        viewModel.getData().observe(viewLifecycleOwner, Observer {
+            adapter.addItem(it)
+        })
     }
 
-    fun dataTest(): MutableList<Users>{
-        var list:MutableList<Users> = arrayListOf()
-        for(i in 0..15){
-            list.add(Users("${i}번"))
-        }
-        return list
-    }
 }

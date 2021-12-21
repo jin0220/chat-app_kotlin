@@ -1,12 +1,12 @@
 package com.example.chat.view
 
-import android.graphics.Color
-import android.graphics.PorterDuff
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.example.chat.R
 import com.example.chat.databinding.ActivityMainBinding
-import com.google.android.material.tabs.TabLayoutMediator
+import com.example.chat.view.chat.ChattingFragment
+import com.example.chat.view.friends.FriendsListFragment
+import com.example.chat.view.setting.SettingFragment
 
 class MainActivity : AppCompatActivity() {
 

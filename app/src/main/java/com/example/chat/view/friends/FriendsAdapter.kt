@@ -1,10 +1,13 @@
-package com.example.chat.view
+package com.example.chat.view.friends
 
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.chat.databinding.RecyclerFriendsListBinding
 import com.example.chat.model.data.Users
+import com.example.chat.view.chat.ChattingDetailActivity
 
 class FriendsAdapter: RecyclerView.Adapter<FriendsAdapter.Holder>() {
 
@@ -23,7 +26,16 @@ class FriendsAdapter: RecyclerView.Adapter<FriendsAdapter.Holder>() {
 
     inner class Holder(val binding: RecyclerFriendsListBinding): RecyclerView.ViewHolder(binding.root){
         fun bind(user:Users){
-            binding.name.text = user.name
+            with(binding) {
+                name.text = user.name
+
+                contentBox.setOnClickListener {
+                    val intent = Intent(contentBox.context, ChattingDetailActivity::class.java)
+                    intent.putExtra("chat_name", user.name)
+                    intent.putExtra("user", user)
+                    ContextCompat.startActivity(contentBox.context, intent, null)
+                }
+            }
         }
     }
 

@@ -1,4 +1,4 @@
-package com.example.chat.view
+package com.example.chat.view.chat
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -10,7 +10,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.chat.R
 import com.example.chat.databinding.FragmentChattingBinding
-import com.example.chat.model.data.Users
 import com.example.chat.viewModel.ChatViewModel
 
 class ChattingFragment : Fragment() {
@@ -44,14 +43,5 @@ class ChattingFragment : Fragment() {
             adapter.addItem(it)
         })
 
-    }
-
-    fun dataTest(): MutableList<Users>{
-        var list: MutableList<Users> = arrayListOf()
-
-        for (i in 0 .. 10){
-            list.add(Users("${i}번"))
-        }
-        return list
     }
 }
