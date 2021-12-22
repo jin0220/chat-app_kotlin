@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.chat.databinding.ActivityChattingDetailBinding
 import com.example.chat.model.data.Chat
 import com.example.chat.model.data.Users
+import com.example.chat.view.PreferenceManager
 import com.example.chat.viewModel.ChatViewModel
 
 class ChattingDetailActivity : AppCompatActivity() {
@@ -23,7 +24,7 @@ class ChattingDetailActivity : AppCompatActivity() {
 
         viewModel = ViewModelProvider(this).get(ChatViewModel::class.java)
 
-        adapter = ChattingDetailAdapter()
+        adapter = ChattingDetailAdapter(this)
         binding.recyclerView.adapter = adapter
         binding.recyclerView.layoutManager = LinearLayoutManager(this)
 
@@ -44,20 +45,20 @@ class ChattingDetailActivity : AppCompatActivity() {
                     viewModel.initChat(
                         intent.getSerializableExtra("user") as Users,
                         Chat(
-                            "me",
+                            PreferenceManager.getString(this, "id")!!,
+                            PreferenceManager.getString(this, "name")!!,
                             binding.content.text.toString(),
-                            System.currentTimeMillis(),
-                            1
+                            System.currentTimeMillis()
                         )
                     )
                 } else {
                     viewModel.insert(
                         chat_name,
                         Chat(
-                            "me",
+                            PreferenceManager.getString(this, "id")!!,
+                            PreferenceManager.getString(this, "name")!!,
                             binding.content.text.toString(),
-                            System.currentTimeMillis(),
-                            1
+                            System.currentTimeMillis()
                         )
                     )
                 }

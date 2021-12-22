@@ -2,11 +2,13 @@ package com.example.chat.view
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import com.example.chat.R
 import com.example.chat.databinding.ActivityMainBinding
 import com.example.chat.view.chat.ChattingFragment
 import com.example.chat.view.friends.FriendsListFragment
 import com.example.chat.view.setting.SettingFragment
+import com.google.firebase.messaging.FirebaseMessaging
 
 class MainActivity : AppCompatActivity() {
 

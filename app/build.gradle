@@ -11,10 +11,11 @@ android {
 
     defaultConfig {
         applicationId "com.example.chat"
-        minSdkVersion 16
+        minSdkVersion 19
         targetSdkVersion 31
         versionCode 1
         versionName "1.0"
+        multiDexEnabled true
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -44,6 +45,7 @@ dependencies {
     // Firebase
     implementation platform('com.google.firebase:firebase-bom:29.0.0')
     implementation 'com.google.firebase:firebase-database'
+    implementation 'com.google.firebase:firebase-messaging:23.0.0'
 
     def fragment_version = "1.3.1"
     implementation "androidx.fragment:fragment-ktx:$fragment_version"
@@ -54,6 +56,9 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
     // LiveData
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version"
+
+    // inSdkVersion 20 이하 "AndroidX를 사용하는" 경우
+    implementation 'androidx.multidex:multidex:2.0.1'
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     implementation 'androidx.core:core-ktx:1.7.0'
