@@ -3,13 +3,23 @@ package com.example.chat.viewModel
 import android.content.Intent
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.chat.model.data.Chat
+import com.example.chat.model.data.NotificationBody
 import com.example.chat.model.data.Users
 import com.example.chat.model.repository.ChatRepository
 import kotlinx.coroutines.launch
 
 class ChatViewModel: ViewModel() {
     private val repository = ChatRepository()
+
+    val myResponse = repository.myResponse
+
+    fun sendNotification(notification: NotificationBody){
+        viewModelScope.launch {
+            repository.sendNotification(notification)
+        }
+    }
 
     fun initChat(users: Users, chat: Chat) {
         repository.initChat(users, chat)
