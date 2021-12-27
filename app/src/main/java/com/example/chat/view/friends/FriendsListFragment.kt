@@ -38,7 +38,7 @@ class FriendsListFragment : Fragment() {
         binding.recyclerView.adapter = adapter
         binding.recyclerView.layoutManager = LinearLayoutManager(context)
 
-        viewModel.getData().observe(viewLifecycleOwner, Observer {
+        viewModel.AllData.observe(viewLifecycleOwner, Observer {
             adapter.addItem(it)
         })
     }

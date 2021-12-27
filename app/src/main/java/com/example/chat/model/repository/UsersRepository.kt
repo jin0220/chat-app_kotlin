@@ -14,11 +14,7 @@ class UsersRepository {
     private val database = FirebaseDatabase.getInstance()
     private val databaseReference = database.getReference("users")
 
-    fun insertData(user : Users){
-        databaseReference.child(user.phone).setValue(user)
-    }
-
-    fun getData() : LiveData<MutableList<Users>>{
+    fun AllData() : LiveData<MutableList<Users>>{
         val mutableList = MutableLiveData<MutableList<Users>>()
         databaseReference.addValueEventListener(object : ValueEventListener {
             val listData: MutableList<Users> = mutableListOf()
@@ -35,6 +31,29 @@ class UsersRepository {
             override fun onCancelled(error: DatabaseError) {
                 TODO("Not yet implemented")
             }
+        })
+        return mutableList
+    }
+
+    fun insertData(user : Users){
+        databaseReference.child(user.phone).setValue(user)
+    }
+
+    fun getData(phone: String): LiveData<MutableList<Users>>{
+        val mutableList = MutableLiveData<MutableList<Users>>()
+        databaseReference.child(phone).addValueEventListener(object : ValueEventListener{
+            val listData: MutableList<Users> = mutableListOf()
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if(snapshot.exists()){
+                    listData.add(snapshot.getValue(Users::class.java)!!)
+                    mutableList.value = listData
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                TODO("Not yet implemented")
+            }
+
         })
         return mutableList
     }

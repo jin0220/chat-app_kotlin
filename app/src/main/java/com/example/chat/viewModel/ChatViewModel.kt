@@ -13,20 +13,12 @@ import kotlinx.coroutines.launch
 class ChatViewModel: ViewModel() {
     private val repository = ChatRepository()
 
-    val myResponse = repository.myResponse
-
-    fun sendNotification(notification: NotificationBody){
-        viewModelScope.launch {
-            repository.sendNotification(notification)
-        }
-    }
-
-    fun initChat(users: Users, chat: Chat) {
+    fun initChat(users: MutableList<Users>, chat: Chat) {
         repository.initChat(users, chat)
     }
 
     //채팅방 리스트
-    val chatList = repository.chatList()
+    fun chatList(userName: String) = repository.chatList(userName)
 
     fun chatDelete(chat_name:String){
         repository.chatDelete(chat_name)

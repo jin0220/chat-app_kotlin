@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import com.example.chat.model.data.Chat
 import com.example.chat.model.data.NotificationBody
 import com.example.chat.model.data.Users
+import com.example.chat.view.PreferenceManager
 import com.example.chat.view.RetrofitClient
 import com.google.firebase.database.*
 import okhttp3.ResponseBody
@@ -13,32 +14,34 @@ import retrofit2.Response
 
 
 class ChatRepository {
-
-    val myResponse : MutableLiveData<Response<ResponseBody>> = MutableLiveData() // 메세지 수신 정보
-
-    // 푸시 메세지 전송
-    suspend fun sendNotification(notification: NotificationBody) {
-        myResponse.value = RetrofitClient.api.sendNotification(notification)
-    }
-
     // Write a message to the database
     private val database = FirebaseDatabase.getInstance()
     private val databaseReference = database.getReference("chat")
 
-    fun initChat(users : Users, chat: Chat){
-        databaseReference.child(users.name).child("users").push().setValue(users)
-        databaseReference.child(users.name).child("message").push().setValue(chat)
+    fun initChat(users : MutableList<Users>, chat: Chat){
+        val key = System.currentTimeMillis().toString()
+        databaseReference.child(key).child("users").setValue(users)
+        databaseReference.child(key).child("message").push().setValue(chat)
     }
 
     // 대화방 리스트
-    fun chatList() : LiveData<MutableList<String>>{
-        var mutableList = MutableLiveData<MutableList<String>>()
+    fun chatList(userName:String) : LiveData<MutableList<MutableMap<String,String>>>{
+        var mutableList = MutableLiveData<MutableList<MutableMap<String,String>>>()
         databaseReference.addValueEventListener(object : ValueEventListener{
-            var list : MutableList<String> = mutableListOf()
             override fun onDataChange(snapshot: DataSnapshot) {
+                var list : MutableList<MutableMap<String,String>> = mutableListOf()
+                var name = ""
+                var token = ""
                 if(snapshot.exists()){
                     for(chat in snapshot.children){
-                        list.add(chat.key!!)
+                        for(user in chat.child("users").children) {
+                            if (userName != user.getValue(Users::class.java)!!.name) {
+                                name += user.getValue(Users::class.java)!!.name
+                                token = user.getValue(Users::class.java)!!.token
+                            }
+                        }
+//                        list.add(Pair(chat.key!!, name))
+                        list.add(mutableMapOf("key" to chat.key!!, "name" to name, "token" to token))
                     }
                     mutableList.value = list
                 }
@@ -64,9 +67,8 @@ class ChatRepository {
     fun getData(chat_name: String) : LiveData<MutableList<Chat>>{
         val mutableList = MutableLiveData<MutableList<Chat>>()
         databaseReference.child(chat_name).child("message").addValueEventListener(object : ValueEventListener{
-            val listData: MutableList<Chat> = mutableListOf()
             override fun onDataChange(snapshot: DataSnapshot) {
-                listData.clear()
+                val listData: MutableList<Chat> = mutableListOf()
                 if(snapshot.exists()){
                     for(chat in snapshot.children){
                         listData.add(chat.getValue(Chat::class.java)!!)

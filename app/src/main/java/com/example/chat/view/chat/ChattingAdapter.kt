@@ -11,7 +11,7 @@ import com.example.chat.viewModel.ChatViewModel
 
 class ChattingAdapter(var viewModel: ChatViewModel) : RecyclerView.Adapter<ChattingAdapter.Holder>(){
 
-    var dataList:MutableList<String> = arrayListOf()
+    var dataList:MutableList<MutableMap<String,String>> = arrayListOf()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
         val binding = RecyclerChattingBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -25,17 +25,19 @@ class ChattingAdapter(var viewModel: ChatViewModel) : RecyclerView.Adapter<Chatt
     override fun getItemCount(): Int = dataList.size
 
     inner class Holder(val binding: RecyclerChattingBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(user:String){
+        fun bind(user:MutableMap<String,String>){
             with(binding) {
-                roomName.text = user
+                roomName.text = user["name"]
                 contentBox.setOnClickListener {
                     val intent = Intent(contentBox.context, ChattingDetailActivity::class.java)
-                    intent.putExtra("chat_name", user)
+                    intent.putExtra("chat_name", user["name"])
+                    intent.putExtra("key", user["key"])
+                    intent.putExtra("token", user["token"])
                     ContextCompat.startActivity(contentBox.context, intent, null)
                 }
 
                 contentBox.setOnLongClickListener {
-                    viewModel.chatDelete(user)
+                    viewModel.chatDelete(user["key"]!!)
                     dataList.clear() // 배열이 중복으로 쌓이는 것을 해결하기 위해 사용
                     return@setOnLongClickListener true
                 }
@@ -43,7 +45,7 @@ class ChattingAdapter(var viewModel: ChatViewModel) : RecyclerView.Adapter<Chatt
         }
     }
 
-    fun addItem(list: MutableList<String>){
+    fun addItem(list: MutableList<MutableMap<String,String>>){
         this.dataList = list
         notifyDataSetChanged()
     }

@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.chat.R
 import com.example.chat.databinding.FragmentChattingBinding
+import com.example.chat.view.PreferenceManager
 import com.example.chat.viewModel.ChatViewModel
 
 class ChattingFragment : Fragment() {
@@ -40,7 +41,7 @@ class ChattingFragment : Fragment() {
         binding.recyclerView.adapter = adapter
         binding.recyclerView.layoutManager = LinearLayoutManager(context)
 
-        viewModel.chatList.observe(viewLifecycleOwner, Observer {
+        viewModel.chatList(context?.let { PreferenceManager.getString(it,"name") }!!).observe(viewLifecycleOwner, {
             adapter.addItem(it)
         })
 
