@@ -8,15 +8,11 @@ import android.content.Intent
 import android.media.RingtoneManager
 import android.os.Build
 import android.util.Log
-import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.app.Person
 import androidx.core.app.NotificationCompat
 import androidx.core.graphics.drawable.IconCompat
 import com.example.chat.R
-import com.google.android.gms.tasks.OnCompleteListener
-import com.google.firebase.iid.internal.FirebaseInstanceIdInternal
-import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 
@@ -27,7 +23,6 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
     override fun onNewToken(token: String) {
         super.onNewToken(token)
         Log.d(TAG, "New token: $token")
-        sendRegistrationToServer(token)
     }
 
     // 메세지가 수신되면 호출
@@ -67,17 +62,21 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_ONE_SHOT) // 일회성
 
         // 알림 채널 이름
-        val channelId = "channel"
+        val channelId = "channel1"
         // 알림 소리
         val soundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
         // 알림에 대한 UI 정보와 작업을 지정한다.
         val notificationBuilder = NotificationCompat.Builder(this, channelId)
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
+            .setDefaults(NotificationCompat.DEFAULT_SOUND or NotificationCompat.DEFAULT_VIBRATE)
             .setSmallIcon(R.mipmap.ic_launcher) // 아이콘 설정
             .setContentTitle(title) // 제목
             .setContentText(body) // 메시지 내용
+//            .setLargeIcon() // 카카오톡 프로필 사진처럼 설정
             .setAutoCancel(true)
-            .setSound(soundUri) // 알림 소리
+//            .setSound(soundUri) // 알림 소리
             .setContentIntent(pendingIntent) // 알림 실행 시 Intent
+
 
         val notificationManager =
             getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
@@ -85,7 +84,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         // 오레오 버전 이후에는 채널이 필요하다.
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channel =
-                NotificationChannel(channelId, "Notice", NotificationManager.IMPORTANCE_DEFAULT)
+                NotificationChannel(channelId, "Notice1", NotificationManager.IMPORTANCE_HIGH)
             notificationManager.createNotificationChannel(channel)
         }
 
@@ -116,7 +115,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             .addMessage(message)
 
         // 알림 채널 이름
-        val channelId = "channel"
+        val channelId = "channel1"
         // 알림 소리
         val soundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
         // 알림에 대한 UI 정보와 작업을 지정한다.
@@ -126,8 +125,10 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             .setContentText(body) // 메시지 내용
             .setStyle(messageStyle)
             .setAutoCancel(true)
-            .setSound(soundUri) // 알림 소리
+//            .setSound(soundUri) // 알림 소리
             .setContentIntent(pendingIntent) // 알림 실행 시 Intent
+            .setPriority(NotificationCompat.PRIORITY_HIGH) // 우선순위가 HIGH 이상이면 팝업
+            .setDefaults(NotificationCompat.DEFAULT_SOUND or NotificationCompat.DEFAULT_VIBRATE)
 
         val notificationManager =
             getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
@@ -135,16 +136,12 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         // 오레오 버전 이후에는 채널이 필요하다.
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channel =
-                NotificationChannel(channelId, "Notice", NotificationManager.IMPORTANCE_DEFAULT)
+                NotificationChannel(channelId, "Notice1", NotificationManager.IMPORTANCE_HIGH) // 우선순위가 HIGH 이상이면 팝업
             notificationManager.createNotificationChannel(channel)
         }
 
         // 알림 생성
         notificationManager.notify(0, notificationBuilder.build())
-    }
-
-    fun sendRegistrationToServer(token: String){
-
     }
 
 }

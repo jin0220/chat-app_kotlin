@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.chat">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -11,9 +11,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Chat">
+        <activity android:name=".view.friends.ProfileActivity"
+            android:theme="@style/Theme.AppCompat.DayNight.Dialog"></activity>
         <activity
             android:name=".view.LoginActivity"
-            android:theme="@style/noActionBar"/>
+            android:theme="@style/noActionBar" />
         <activity
             android:name=".view.LoadingActivity"
             android:theme="@style/noActionBar">
@@ -26,14 +28,12 @@
         <activity android:name=".view.chat.ChattingDetailActivity" />
         <activity
             android:name=".view.MainActivity"
-            android:theme="@style/noActionBar"></activity>
-
-        <!--FCM service-->
+            android:theme="@style/noActionBar" /> <!-- FCM service -->
         <service
             android:name=".view.MyFirebaseMessagingService"
             android:exported="false">
             <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
     </application>

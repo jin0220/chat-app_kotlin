@@ -30,8 +30,9 @@ class FriendsAdapter: RecyclerView.Adapter<FriendsAdapter.Holder>() {
                 name.text = user.name
 
                 contentBox.setOnClickListener {
-                    val intent = Intent(contentBox.context, ChattingDetailActivity::class.java)
-                    intent.putExtra("chat_name", user.name)
+                    val intent = Intent(contentBox.context, ProfileActivity::class.java)
+                    intent.putExtra("name", user.name)
+                    intent.putExtra("key", user.token)
                     intent.putExtra("user", user)
                     ContextCompat.startActivity(contentBox.context, intent, null)
                 }
