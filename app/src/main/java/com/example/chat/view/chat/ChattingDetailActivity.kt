@@ -1,11 +1,16 @@
 package com.example.chat.view.chat
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.provider.MediaStore
 import android.util.Log
 import android.view.View
 import android.view.ViewTreeObserver
 import android.view.WindowManager
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.contract.ActivityResultContract
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -30,8 +35,10 @@ class ChattingDetailActivity : AppCompatActivity() {
     lateinit var chat_name: String //채팅방 이름
     lateinit var key: String //채팅방 키값
     lateinit var users: MutableList<Users>
-    var lastHeight : Int = 0
     private lateinit var keyboardVisibilityUtils: KeyboardVisibilityUtils
+
+    val id = PreferenceManager.getString(this, "id")!!
+    val name = PreferenceManager.getString(this, "name")!!
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -67,21 +74,32 @@ class ChattingDetailActivity : AppCompatActivity() {
         binding.recyclerView.layoutManager = LinearLayoutManager(this)
 
         chat_name = intent.getStringExtra("chat_name")!!
-        key = intent.getStringExtra("key")!!
         supportActionBar?.title = chat_name
 
-        chatViewModel.allData(key).observe(this, Observer {
-            adapter.dataList = it
-            adapter.notifyDataSetChanged()
-            binding.recyclerView.scrollToPosition(adapter.dataList.size - 1) //채팅방 안에 들어갔을 때 스크롤이 맨 아래로 가게끔 구현
-        })
+        if(!intent.getStringExtra("key").isNullOrEmpty()) {
+            key = intent.getStringExtra("key")!! //친구 리스트에서 채팅방 넘어갈 경우 채팅 내용 불러올 수 없음
+
+            chatViewModel.allData(key).observe(this, Observer {
+                adapter.dataList = it
+                adapter.notifyDataSetChanged()
+                binding.recyclerView.scrollToPosition(adapter.dataList.size - 1) //채팅방 안에 들어갔을 때 스크롤이 맨 아래로 가게끔 구현
+            })
+        }
+    }
+
+    val getContent = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
+        result ->
+    }
+
+    fun photo(view: View){
+        val intent  = Intent(Intent.ACTION_PICK) //선택창이 나옴
+        intent.type = MediaStore.Images.Media.CONTENT_TYPE
+        getContent.launch(intent)
     }
 
 
     fun sendMessage(view: View) {
         if (binding.content.text.isNotEmpty()) {
-            val id = PreferenceManager.getString(this, "id")!!
-            val name = PreferenceManager.getString(this, "name")!!
 
             if (adapter.dataList.isEmpty()) {
                 users.add(intent.getSerializableExtra("user") as Users)

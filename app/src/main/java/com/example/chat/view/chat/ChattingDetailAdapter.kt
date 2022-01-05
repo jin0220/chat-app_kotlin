@@ -87,5 +87,22 @@ class ChattingDetailAdapter(val context: Context) :
         }
     }
 
+    inner class RightImageHolder(view: View) : RecyclerView.ViewHolder(view) {
+        fun bind(chat: Chat) {
+            val photo = itemView.findViewById<TextView>(R.id.photo)
+            val date = itemView.findViewById<TextView>(R.id.date)
+
+            photo.text = chat.content
+
+            var sdf = SimpleDateFormat("hh:mm")
+
+            if (SimpleDateFormat("HH").format(chat.date).toInt() > 12) {
+                date.text = "오후 " + sdf.format(chat.date)
+            } else {
+                date.text = "오전 " + sdf.format(chat.date)
+            }
+        }
+    }
+
 
 }

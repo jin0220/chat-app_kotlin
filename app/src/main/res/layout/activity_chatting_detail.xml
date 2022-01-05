@@ -27,9 +27,18 @@
         android:focusableInTouchMode="true"
         android:background="#eee">
 
+        <ImageView
+            android:id="@+id/image"
+            android:layout_width="wrap_content"
+            android:layout_height="43dp"
+            android:paddingHorizontal="10dp"
+            android:background="@color/white"
+            android:src="@drawable/ic_image"
+            android:onClick="photo" />
+
         <EditText
             android:id="@+id/content"
-            android:layout_width="340dp"
+            android:layout_width="295dp"
             android:layout_height="wrap_content"
             android:inputType="textMultiLine"
             android:padding="10dp"
